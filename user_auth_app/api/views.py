@@ -3,6 +3,7 @@ from rest_framework.authtoken.models import Token
 from .serializers import RegistrationSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
+from rest_framework import status
 
 
 @api_view(['POST'])
@@ -14,11 +15,13 @@ def registration_view(request):
         token, create = Token.objects.get_or_create(user=new_user)
         data = {
             'token' : token.key,
-            'username' : new_user.username,
-            'email' : new_user.email
+            'fullname' : new_user.userprofile.fullname,
+            'email' : new_user.email,
+            'user_id' : new_user.pk
         }
         
     else:
         data=serializer.errors
-        
-    return Response(data)
+        return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response(data, status=status.HTTP_201_CREATED)
