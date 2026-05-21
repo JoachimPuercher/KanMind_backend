@@ -59,7 +59,7 @@ class LoginSerializer(serializers.Serializer):
                 values["user"] = user
                 return values
             else:
-                raise serializers.ValidationError("Invalid credentials [PASSWORD].")
+                raise serializers.ValidationError("Invalid credentials.")
             
         else:
-            raise serializers.ValidationError("Invalid credentials [EMAIL].")
+            raise serializers.ValidationError("Invalid credentials.")
