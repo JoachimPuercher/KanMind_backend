@@ -3,13 +3,12 @@ from django.contrib.auth.models import User
 from ..models import UserProfile
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    repeat_password = serializers.CharField(write_only=True)
+    repeated_password = serializers.CharField(write_only=True)
     fullname = serializers.CharField()
-    data_accepted = serializers.BooleanField(write_only=True)
 
     class Meta:
         model = User
-        fields = ["fullname", "email", "password", "repeat_password", "data_accepted"]
+        fields = ["fullname", "email", "password", "repeated_password"]
         extra_kwargs = {
             'password' : {
                 'write_only' : True
@@ -25,7 +24,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         UserProfile.objects.create(
             user=user,
             fullname=self.validated_data["fullname"],
-            data_save_accepted=self.validated_data["data_accepted"]
+            data_save_accepted=True
         )
         return user
         
@@ -41,7 +40,26 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Privacy Policy not accepted")
 
     def validate(self, values):
-        if values["password"] != values["repeat_password"]:
+        if values["password"] != values["repeated_password"]:
             raise serializers.ValidationError("Passwords do not match!")
         else:
             return values
+        
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, values):
+        user = User.objects.filter(email=values["email"]).first()
+
+        if user:
+            pw_valid = user.check_password(values["password"])
+
+            if pw_valid == True:
+                values["user"] = user
+                return values
+            else:
+                raise serializers.ValidationError("Invalid credentials [PASSWORD].")
+            
+        else:
+            raise serializers.ValidationError("Invalid credentials [EMAIL].")
