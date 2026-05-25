@@ -15,7 +15,7 @@ class Status(models.TextChoices):
     REVIEW = "review"
     DONE = "done"
 class Task(models.Model):
-    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name="tasks")
     title = models.CharField(max_length=80)
     description = models.TextField()
     status = models.CharField(max_length=20, choices=Status.choices)
