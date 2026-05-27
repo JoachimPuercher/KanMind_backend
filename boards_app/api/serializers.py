@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from boards_app.models import Board
 from tasks_app.models import Status, Priority
+from user_auth_app.models import User
 
 class GetBoardSerializer(serializers.ModelSerializer):
 
@@ -24,4 +25,12 @@ class GetBoardSerializer(serializers.ModelSerializer):
     
     def get_tasks_high_prio_count(self, board):
         return board.tasks.filter(priority=Priority.HIGH).count()
+    
+
+class PostBoardSerializer(serializers.ModelSerializer):
+    members = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
+    class Meta:
+        model = Board
+        fields = ["title", "members"]
+
     
