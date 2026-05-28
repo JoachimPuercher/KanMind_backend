@@ -32,5 +32,3 @@ class PostBoardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Board
         fields = ["title", "members"]
-
-    
