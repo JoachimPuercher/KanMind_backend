@@ -29,9 +29,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return user
         
     def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
+        new_mail = value.lower()
+        if User.objects.filter(email=new_mail).exists():
             raise serializers.ValidationError("Email already exists")
-        return value
+        return new_mail
     
     def validate_data_accepted(self, value):
         if (value==True):
@@ -63,3 +64,7 @@ class LoginSerializer(serializers.Serializer):
             
         else:
             raise serializers.ValidationError("Invalid credentials.")
+
+
+class EmailQuerySerializer(serializers.Serializer):
+    email = serializers.EmailField()
