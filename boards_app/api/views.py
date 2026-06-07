@@ -1,15 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import authentication, permissions, status
+from rest_framework import status
 from ..models import Board
 from .serializers import GetBoardSerializer, PostBoardSerializer
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
 class BoardListView(APIView):
-
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
         boards = Board.objects.filter(
@@ -26,9 +23,6 @@ class BoardListView(APIView):
         return Response (response.data, status=status.HTTP_201_CREATED)
 
 class BoardDetailView(APIView):
-
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, pk):
         board = get_object_or_404(
