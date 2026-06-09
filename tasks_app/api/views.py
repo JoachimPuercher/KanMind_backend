@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status, generics
 from .serializers import TaskSerializer
 from ..models import Board
+from .permission import IsBoardMember
 # from .serializers import GetBoardSerializer, PostBoardSerializer
 from django.db.models import Q
 # from django.shortcuts import get_object_or_404
@@ -20,3 +21,8 @@ class TaskListSelfAssignedView(APIView):
 
 class PostTaskView(generics.CreateAPIView):
     serializer_class = TaskSerializer
+    permission_classes = [IsBoardMember]
+
+class UpdateDeleteTaskView(generics.DestroyAPIView, generics.UpdateAPIView):
+    serializer_class = TaskSerializer
+    permission_classes = []
