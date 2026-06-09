@@ -23,3 +23,9 @@ class Task(models.Model):
     assignee = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="assignee_tasks")
     reviewer = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="reviewer_tasks")
     due_date = models.DateField()
+
+class Comment(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="comments")
+    created_at = models.DateField(auto_now_add=True)
+    author = models.CharField(max_length=30)
+    content = models.CharField(max_length=200)
