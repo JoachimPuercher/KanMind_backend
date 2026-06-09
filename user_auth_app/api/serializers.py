@@ -51,7 +51,10 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, values):
-        user = User.objects.filter(email=values["email"]).first()
+        new_mail = values["email"].lower()
+        user = User.objects.filter(email=new_mail).first()
+        print(user)
+
 
         if user:
             pw_valid = user.check_password(values["password"])
