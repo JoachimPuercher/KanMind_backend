@@ -5,7 +5,7 @@ from .serializers import TaskSerializer, CommentSerializer
 from ..models import Board, Comment
 from tasks_app.models import Task
 from django.contrib.auth.models import User
-from .permission import IsBoardMember
+from .permission import IsBoardMember, IsCommentOwner
 from django.shortcuts import get_object_or_404
 
 # from .serializers import GetBoardSerializer, PostBoardSerializer
@@ -46,5 +46,8 @@ class TaskCommentView(generics.ListCreateAPIView):
         serializer.save(author=self.request.user, task=task)
 
 class DeleteCommentView(generics.DestroyAPIView):
-    permission_classes = [IsBoardMember]
-    
+    permission_classes = [IsCommentOwner]
+    lookup_url_kwarg = "comment_id"
+
+    def get_queryset(self):
+        return Comment.objects.filter(task_id=self.kwargs["task_id"]).all()
