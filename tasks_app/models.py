@@ -27,5 +27,5 @@ class Task(models.Model):
 class Comment(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="comments")
     created_at = models.DateField(auto_now_add=True)
-    author = models.CharField(max_length=30)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, max_length=30, related_name="users")
     content = models.CharField(max_length=200)
