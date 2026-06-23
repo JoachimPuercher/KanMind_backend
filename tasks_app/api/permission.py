@@ -33,6 +33,12 @@ class IsBoardMemberFromTask(BasePermission):
         task = get_object_or_404(Task, pk=view.kwargs["task_id"])
         return bool(task.board.members.contains(request.user))
         
+class IsBoardOwnerFromTask(BasePermission):
+
+    def has_permission(self, request, view):
+        task = get_object_or_404(Task, pk=view.kwargs["task_id"])
+        return task.board.owner == request.user
+        
 
 class IsBoardOwner(BasePermission):
 
@@ -57,7 +63,7 @@ class IsTaskOwner(BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.user == obj.owner
 
-class IsCommentOwnerForDelete(BasePermission):
+class IsCommentOwner(BasePermission):
     message = "No Permission to delete comment."
 
     def has_permission(self, request, view):
