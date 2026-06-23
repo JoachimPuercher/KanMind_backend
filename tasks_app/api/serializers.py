@@ -13,7 +13,7 @@ class MemberSerializer(serializers.ModelSerializer):
         read_only_fields = ["email", "id", "fullname"]
 
 
-class TaskSerializer(serializers.ModelSerializer):
+class TaskPostSerializer(serializers.ModelSerializer):
 
     assignee = MemberSerializer(read_only=True)
     reviewer = MemberSerializer(read_only=True)
@@ -23,10 +23,34 @@ class TaskSerializer(serializers.ModelSerializer):
     reviewer_id = serializers.PrimaryKeyRelatedField(
          queryset=User.objects.all(), write_only=True, source="reviewer", required=False
     )
+    comments_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
-        fields = ["board", "title", "description", "status", "priority", "assignee", "assignee_id", "reviewer", "reviewer_id", "due_date"]
+        fields = ["board", "title", "description", "status", "priority", "assignee", "assignee_id", "reviewer", "reviewer_id", "due_date", "comments_count"]
+
+    def get_comments_count(self, obj):
+        return obj.comments.count()
+    
+class TaskPatchSerializer(serializers.ModelSerializer):
+
+    assignee = MemberSerializer(read_only=True)
+    reviewer = MemberSerializer(read_only=True)
+    assignee_id = serializers.PrimaryKeyRelatedField(
+         queryset=User.objects.all(), write_only=True, source="assignee", required=False
+    )
+    reviewer_id = serializers.PrimaryKeyRelatedField(
+         queryset=User.objects.all(), write_only=True, source="reviewer", required=False
+    )
+    comments_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Task
+        fields = ["title", "description", "status", "priority", "assignee", "assignee_id", "reviewer", "reviewer_id", "due_date", "comments_count"]
+        read_only_fields = ["id"]
+
+    def get_comments_count(self, obj):
+        return obj.comments.count()
 
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
