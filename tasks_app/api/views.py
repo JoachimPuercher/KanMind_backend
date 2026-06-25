@@ -16,18 +16,19 @@ from django.db.models import Q
 
 
 
-class TaskListSelfAssignedView(APIView):
+class TaskAssigneeList(generics.ListAPIView):
+    serializer_class = TaskSerializerCommentsCount
 
-    def get(self, request):
-        boards = Board.objects.filter(Q(owner=request.user) | Q(members=request.user)).distinct()
-        print (boards)
+    def get_queryset(self):
+        return Task.objects.filter(Q(assignee=self.request.user)).distinct()
+
 
 
 class TasksReviewingList(generics.ListAPIView):
     serializer_class = TaskSerializerCommentsCount
     
     def get_queryset(self):
-        return Task.objects.filter(Q(assignee=self.request.user)).distinct()
+        return Task.objects.filter(Q(reviewer=self.request.user)).distinct()
     
 
 class PostTaskView(generics.CreateAPIView):
