@@ -73,3 +73,7 @@ class IsCommentOwner(BasePermission):
     def has_object_permission(self, request, view, obj:Comment):
         return request.user == obj.author
             
+
+class DenyAllUsers(BasePermission):
+    def has_permission(self, request, view):
+        return False
