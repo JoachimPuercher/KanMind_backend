@@ -21,6 +21,13 @@ class TaskListSelfAssignedView(APIView):
     def get(self, request):
         boards = Board.objects.filter(Q(owner=request.user) | Q(members=request.user)).distinct()
         print (boards)
+
+
+class TasksReviewingList(generics.ListAPIView):
+    serializer_class = TaskSerializerCommentsCount
+    
+    def get_queryset(self):
+        return Task.objects.filter(Q(assignee=self.request.user)).distinct()
     
 
 class PostTaskView(generics.CreateAPIView):
