@@ -1,11 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, generics
-from .serializers import TaskPostSerializer, CommentSerializer, TaskPatchSerializer
+from rest_framework import status, generics, mixins
+from .serializers import TaskSerializerCommentsCount, CommentSerializer, TaskSerializer
 from ..models import Board, Comment
 from tasks_app.models import Task
 from django.contrib.auth.models import User
-from .permission import IsBoardMemberFromPayload, IsCommentOwner, IsBoardOwnerFromTask, IsTaskOwner, IsBoardMemberFromTask
+from .permission import IsBoardMemberFromPayload, DenyAllUsers, IsBoardOwnerFromPayload, IsCommentOwner, IsBoardOwnerFromTask, IsTaskOwner, IsBoardMemberFromTask
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 # from .serializers import GetBoardSerializer, PostBoardSerializer
@@ -24,25 +24,33 @@ class TaskListSelfAssignedView(APIView):
     
 
 class PostTaskView(generics.CreateAPIView):
-    permission_classes = [IsAuthenticated, IsBoardMemberFromPayload]
-    serializer_class = TaskPostSerializer
+    permission_classes = [IsAuthenticated, IsBoardOwnerFromPayload | IsBoardMemberFromPayload]
+    serializer_class = TaskSerializerCommentsCount
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
 
-# WIE DIFFERENZIERE ICH DELETE AND UPDATE
-# class DeleteTaskView(generics.DestroyAPIView):
-#     serializer_class = TaskSerializer
-#     permission_classes = [IsAuthenticated, IsBoardOwner | IsTaskOwner]
-#     lookup_url_kwarg = "task_id"
-#     queryset = Task.objects.all()
-
-class PatchTaskView(generics.UpdateAPIView):
-    serializer_class = TaskPatchSerializer
-    permission_classes = [IsAuthenticated, IsBoardMemberFromTask | IsTaskOwner]
+class UpdateDeleteTaskView(mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
+    serializer_class = TaskSerializer
     lookup_url_kwarg = "task_id"
     queryset = Task.objects.all()
+
+    def get_permissions(self):
+        if self.request.method == "DELETE":
+            return [IsAuthenticated(), (IsTaskOwner | IsBoardOwnerFromTask)()]
+        
+        elif self.request.method == "PATCH":
+            return [IsAuthenticated(), (IsBoardMemberFromTask | IsTaskOwner)()]
+
+        else:
+            return [DenyAllUsers()]
+        
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+    
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
 class TaskCommentView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated, IsBoardMemberFromTask | IsBoardOwnerFromTask]
