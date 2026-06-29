@@ -5,7 +5,7 @@ from .serializers import TaskSerializerCommentsCount, CommentSerializer, TaskSer
 from ..models import Board, Comment
 from tasks_app.models import Task
 from django.contrib.auth.models import User
-from .permission import IsBoardMemberFromPayload, DenyAllUsers, IsBoardOwnerFromPayload, IsCommentOwner, IsBoardOwnerFromTask, IsTaskOwner, IsBoardMemberFromTask
+from .permission import IsBoardMemberFromTaskPayload, DenyAllUsers, IsBoardOwnerFromTaskPayload, IsCommentOwner, IsBoardOwnerFromTask, IsTaskOwner, IsBoardMemberFromTask
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 # from .serializers import GetBoardSerializer, PostBoardSerializer
@@ -32,7 +32,7 @@ class TasksReviewingList(generics.ListAPIView):
     
 
 class PostTaskView(generics.CreateAPIView):
-    permission_classes = [IsAuthenticated, IsBoardOwnerFromPayload | IsBoardMemberFromPayload]
+    permission_classes = [IsAuthenticated, IsBoardOwnerFromTaskPayload | IsBoardMemberFromTaskPayload]
     serializer_class = TaskSerializerCommentsCount
 
     def perform_create(self, serializer):

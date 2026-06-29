@@ -5,6 +5,9 @@ from ..models import Board
 from .serializers import GetBoardSerializer, PostBoardSerializer
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
+from .permissions import IsBoardOwner, IsBoardMember
+
 
 class BoardListView(APIView):
 
@@ -24,10 +27,20 @@ class BoardListView(APIView):
 
 class BoardDetailView(APIView):
 
+    def get_permissions(self):
+         if self.request.method == "GET" or self.request.method == "PATCH":
+              return [IsAuthenticated(), (IsBoardOwner | IsBoardMember)()]
+
+         elif self.request.method == "DELETE":
+              return [IsAuthenticated(), IsBoardOwner()]
+         
+         return False
+
     def get(self, request, pk):
         board = get_object_or_404(
             Board.objects.filter(Q(owner=request.user) | Q(members=request.user)).distinct(),
             pk=pk)
+        self.check_object_permissions(request, board)
         serializer = GetBoardSerializer(board)
         return Response (serializer.data, status=status.HTTP_200_OK)
 
@@ -35,15 +48,16 @@ class BoardDetailView(APIView):
             board = get_object_or_404(
                 Board.objects.filter(Q(owner=request.user) | Q(members=request.user)).distinct(),
                 pk=pk)
+            self.check_object_permissions(request, board)
             serializer = PostBoardSerializer(board, request.data, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             updatedBoard = GetBoardSerializer(board)
             return Response (updatedBoard.data, status=status.HTTP_200_OK)
     
-    def delete(self, request, pk):
+    def delete(self, request, board_id):
             board = get_object_or_404(
-                Board.objects.filter(Q(owner=request.user)).distinct(),
-                pk=pk)
+                Board.objects.filter(pk=board_id))
+            self.check_object_permissions(request, board)
             board.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
