@@ -35,3 +35,9 @@ pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
 ```
+
+For development (adds linters/formatter — flake8, autopep8), install instead:
+
+```bash
+pip install -r requirements-dev.txt
+```
