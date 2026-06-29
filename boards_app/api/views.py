@@ -10,6 +10,9 @@ from .permissions import IsBoardOwner, IsBoardMember
 
 
 class BoardListView(APIView):
+        
+    # def get_permissions(self):
+    #     return [IsAuthenticated()]
 
     def get(self, request, format=None):
         boards = Board.objects.filter(
