@@ -1,0 +1,15 @@
+[flake8]
+max-line-length = 79
+exclude = venv, */migrations/*, __pycache__
+
+# Django generates these stubs/defaults; we don't lint framework boilerplate.
+per-file-ignores =
+    core/settings.py:E501
+    boards_app/admin.py:F401
+    tasks_app/admin.py:F401
+    user_auth_app/admin.py:F401
+    boards_app/tests.py:F401
+    tasks_app/tests.py:F401
+    user_auth_app/tests.py:F401
+    boards_app/views.py:F401
+    tasks_app/views.py:F401
