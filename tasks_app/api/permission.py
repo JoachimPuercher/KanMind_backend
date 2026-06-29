@@ -4,7 +4,7 @@ from ..models import Comment, Task
 from django.shortcuts import get_object_or_404
 
 
-class IsBoardMemberFromPayload(BasePermission):
+class IsBoardMemberFromTaskPayload(BasePermission):
     message = "You have no permission to access the board."
 
     def has_permission(self, request, view):
@@ -12,20 +12,21 @@ class IsBoardMemberFromPayload(BasePermission):
         if board is None:
             self.message = "No board found to check permissions."
             return False
-        
-        return board.members.contains(request.user)
-    
 
-class IsBoardOwnerFromPayload(BasePermission):
+        return board.members.contains(request.user)
+
+
+class IsBoardOwnerFromTaskPayload(BasePermission):
     message = "You have no permission to access the board."
 
     def has_permission(self, request, view):
         board = Board.objects.filter(pk=request.data.get("board")).first()
         if board is None:
-            self.message= "No board found to check permissions."
+            self.message = "No board found to check permissions."
             return False
-        
+
         return request.user == board.owner
+
 
 class IsBoardMemberFromTask(BasePermission):
 
