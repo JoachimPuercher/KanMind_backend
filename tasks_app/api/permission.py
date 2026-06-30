@@ -1,6 +1,7 @@
-from rest_framework.permissions import BasePermission
-from ..models import Board, Comment, Task
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import BasePermission
+
+from ..models import Board, Comment, Task
 
 
 class IsBoardMemberFromTaskPayload(BasePermission):
