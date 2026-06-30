@@ -1,17 +1,18 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from ..models import Board
+from .permissions import IsBoardOwner, IsBoardMember
 from .serializers import (
     GetBoardSerializer,
     PatchBoardDetailSerializer,
     UpdateBoardDetailSerializer,
     GetBoardDetailSerializer,
     PostBoardSerializer)
-from django.db.models import Q
-from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
-from .permissions import IsBoardOwner, IsBoardMember
 
 
 class BoardListView(APIView):

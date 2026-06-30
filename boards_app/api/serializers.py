@@ -1,9 +1,10 @@
 from rest_framework import serializers
+
 from boards_app.models import Board
-from tasks_app.models import Status, Priority
-from user_auth_app.models import User
 from tasks_app.api.serializers import (
     MemberSerializer, TaskSerializerCommentsCount)
+from tasks_app.models import Status, Priority
+from user_auth_app.models import User
 
 
 class GetBoardSerializer(serializers.ModelSerializer):
