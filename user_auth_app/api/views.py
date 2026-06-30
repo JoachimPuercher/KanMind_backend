@@ -50,7 +50,7 @@ def login_view(request):
 
     else:
         data = serializer.errors
-        return Response(data, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
