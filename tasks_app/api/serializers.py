@@ -37,6 +37,7 @@ class TaskSerializerCommentsCount(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = [
+            "id",
             "board",
             "title",
             "description",
@@ -73,6 +74,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = [
+            "id",
             "title",
             "description",
             "status",
