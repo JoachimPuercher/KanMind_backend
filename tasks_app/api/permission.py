@@ -11,10 +11,7 @@ class IsBoardMemberFromTaskPayload(BasePermission):
 
     def has_permission(self, request, view):
         """Return True if the user is a member of the payload board."""
-        board = Board.objects.filter(pk=request.data.get("board")).first()
-        if board is None:
-            self.message = "No board found to check permissions."
-            return False
+        board = get_object_or_404(Board, pk=request.data.get("board"))
 
         return board.members.contains(request.user)
 
@@ -26,10 +23,7 @@ class IsBoardOwnerFromTaskPayload(BasePermission):
 
     def has_permission(self, request, view):
         """Return True if the user owns the payload board."""
-        board = Board.objects.filter(pk=request.data.get("board")).first()
-        if board is None:
-            self.message = "No board found to check permissions."
-            return False
+        board = get_object_or_404(Board, pk=request.data.get("board"))
 
         return request.user == board.owner
 
