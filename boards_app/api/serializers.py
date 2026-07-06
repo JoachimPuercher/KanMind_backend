@@ -51,7 +51,7 @@ class PostBoardSerializer(serializers.ModelSerializer):
 class GetBoardDetailSerializer(serializers.Serializer):
     """Serialize a board with nested members and tasks."""
 
-    id = serializers.UUIDField(read_only=True)
+    id = serializers.IntegerField(read_only=True)
     title = serializers.CharField(max_length=200, read_only=True)
     owner_id = serializers.IntegerField(read_only=True)
     members = MemberSerializer(read_only=True, many=True)
@@ -61,7 +61,7 @@ class GetBoardDetailSerializer(serializers.Serializer):
 class UpdateBoardDetailSerializer(serializers.Serializer):
     """Serialize a board update response with nested users."""
 
-    id = serializers.UUIDField(read_only=True)
+    id = serializers.IntegerField(read_only=True)
     title = serializers.CharField(read_only=True, max_length=200)
     owner_data = MemberSerializer(source="owner", many=False)
     members_data = MemberSerializer(source="members", many=True)
