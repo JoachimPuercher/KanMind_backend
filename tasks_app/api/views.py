@@ -4,10 +4,10 @@ from rest_framework import generics, mixins
 from rest_framework.permissions import IsAuthenticated
 
 from ..models import Comment
-from .permission import (IsBoardMemberFromTaskPayload,
-                         DenyAllUsers, IsBoardOwnerFromTaskPayload,
-                         IsCommentOwner, IsBoardOwnerFromTask,
-                         IsTaskOwner, IsBoardMemberFromTask)
+from .permissions import (IsBoardMemberFromTaskPayload,
+                          DenyAllUsers, IsBoardOwnerFromTaskPayload,
+                          IsCommentOwner, IsBoardOwnerFromTask,
+                          IsTaskOwner, IsBoardMemberFromTask)
 from .serializers import (TaskSerializerWithCommentsCount,
                           CommentSerializer, UpdateDeleteTaskSerializer)
 from tasks_app.models import Task
