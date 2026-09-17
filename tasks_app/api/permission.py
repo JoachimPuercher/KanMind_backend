@@ -57,29 +57,6 @@ class IsBoardOwnerFromTask(BasePermission):
         return task.board.owner == request.user
 
 
-class IsBoardOwner(BasePermission):
-    """Allow write methods only to the task's board owner."""
-
-    def has_permission(self, request, view):
-        """Allow only PATCH and DELETE at the view level."""
-        return request.method == "PATCH" or request.method == "DELETE"
-
-    def has_object_permission(self, request, view, obj: Task):
-        """Return True if the user owns the task's board."""
-        return request.user == obj.board.owner
-
-
-class IsBoardMemberGetPost(BasePermission):
-    """Allow GET and POST to members of the task's board."""
-
-    def has_permission(self, request, view):
-        """Return True for GET/POST when the user is a member."""
-        method = bool(request.method == "GET" or request.method == "POST")
-        task = get_object_or_404(Task, pk=view.kwargs["task_id"])
-        is_member = task.board.members.contains(request.user)
-        return bool(method and is_member)
-
-
 class IsTaskOwner(BasePermission):
     """Allow access only to the task's owner."""
 
