@@ -34,6 +34,8 @@ class BoardListView(APIView):
         serializer = PostBoardSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         board = serializer.save(owner=request.user)
+        # The owner must be a member to be selectable as assignee/reviewer.
+        board.members.add(request.user)
         response = GetBoardSerializer(board)
         return Response(response.data, status=status.HTTP_201_CREATED)
 
