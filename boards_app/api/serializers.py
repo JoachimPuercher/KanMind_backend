@@ -1,3 +1,4 @@
+"""Serializers of the boards API."""
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from boards_app.models import Board

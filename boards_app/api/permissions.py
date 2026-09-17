@@ -1,3 +1,4 @@
+"""Permissions of the boards API."""
 from rest_framework.permissions import BasePermission
 from ..models import Board
 

@@ -1,3 +1,4 @@
+"""Serializers for registration, login and the email lookup."""
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from ..models import UserProfile

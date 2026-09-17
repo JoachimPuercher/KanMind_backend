@@ -1,3 +1,4 @@
+"""URL routes of the tasks API."""
 from django.urls import path
 from .views import (
     PostTaskView, TaskAssigneeList, DeleteCommentView,
