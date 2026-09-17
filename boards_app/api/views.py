@@ -18,9 +18,6 @@ from .serializers import (
 class BoardListView(APIView):
     """List the user's boards and create new boards."""
 
-    # def get_permissions(self):
-    #     return [IsAuthenticated()]
-
     def get(self, request, format=None):
         """Return all boards the user owns or is a member of."""
         boards = Board.objects.filter(
