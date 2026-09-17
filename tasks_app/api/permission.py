@@ -1,7 +1,18 @@
 from django.shortcuts import get_object_or_404
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import BasePermission
 
 from ..models import Board, Comment, Task
+
+
+def get_board_from_payload(request):
+    """Return the payload board: 400 if the id is invalid, 404 if unknown."""
+    try:
+        board_id = int(request.data.get("board"))
+    except (AttributeError, TypeError, ValueError):
+        raise ValidationError({"board": "A valid board id is required."})
+
+    return get_object_or_404(Board, pk=board_id)
 
 
 class IsBoardMemberFromTaskPayload(BasePermission):
@@ -11,7 +22,7 @@ class IsBoardMemberFromTaskPayload(BasePermission):
 
     def has_permission(self, request, view):
         """Return True if the user is a member of the payload board."""
-        board = get_object_or_404(Board, pk=request.data.get("board"))
+        board = get_board_from_payload(request)
 
         return board.members.contains(request.user)
 
@@ -23,7 +34,7 @@ class IsBoardOwnerFromTaskPayload(BasePermission):
 
     def has_permission(self, request, view):
         """Return True if the user owns the payload board."""
-        board = get_object_or_404(Board, pk=request.data.get("board"))
+        board = get_board_from_payload(request)
 
         return request.user == board.owner
 
