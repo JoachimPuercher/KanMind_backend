@@ -3,6 +3,8 @@ from django.db import models
 
 
 class Board(models.Model):
+    """A Kanban board owned by one user and shared with its members."""
+
     owner = models.ForeignKey(
         User,
         on_delete=models.CASCADE,

@@ -6,12 +6,16 @@ from boards_app.models import Board
 
 
 class Priority(models.TextChoices):
+    """Priority levels a task can have."""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
 
 
 class Status(models.TextChoices):
+    """Columns a task can sit in on the board."""
+
     TO_DO = "to-do"
     IN_PROGRESS = "in-progress"
     REVIEW = "review"
@@ -19,6 +23,8 @@ class Status(models.TextChoices):
 
 
 class Task(models.Model):
+    """A card on a board, with an assignee and a reviewer."""
+
     board = models.ForeignKey(
         Board,
         on_delete=models.CASCADE,
@@ -46,6 +52,8 @@ class Task(models.Model):
 
 
 class Comment(models.Model):
+    """A comment written by a board member on a task."""
+
     task = models.ForeignKey(
         Task,
         on_delete=models.CASCADE,

@@ -5,6 +5,8 @@ from django.utils import timezone
 
 
 class UserProfile(models.Model):
+    """Extra registration data for a Django user."""
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     fullname = models.CharField(max_length=50)
     data_save_accepted = models.BooleanField()
