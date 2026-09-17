@@ -47,7 +47,8 @@ class BoardDetailView(APIView):
             return [IsAuthenticated(), (IsBoardOwner | IsBoardMember)()]
         elif self.request.method == "DELETE":
             return [IsAuthenticated(), IsBoardOwner()]
-        return False
+        # Other methods have no handler; DRF answers them with 405.
+        return [IsAuthenticated()]
 
     def get(self, request, board_id):
         """Return the board detail for owners and members."""
