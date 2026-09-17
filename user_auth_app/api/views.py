@@ -56,9 +56,9 @@ def login_view(request):
 @api_view(['GET'])
 def email_check_view(request):
     """Return basic user data for a given email or 404."""
-    param_email = request.query_params.get("email").lower()
-    query_serializer = EmailQuerySerializer(data={"email": param_email})
-    if query_serializer.is_valid():
+    serializer = EmailQuerySerializer(data=request.query_params)
+    if serializer.is_valid():
+        param_email = serializer.validated_data["email"].lower()
         user = User.objects.filter(email=param_email).first()
 
         if user is None:
@@ -74,5 +74,5 @@ def email_check_view(request):
 
     else:
         return Response(
-            query_serializer.errors,
+            serializer.errors,
             status=status.HTTP_400_BAD_REQUEST)
