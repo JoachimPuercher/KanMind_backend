@@ -8,15 +8,15 @@ from .permission import (IsBoardMemberFromTaskPayload,
                          DenyAllUsers, IsBoardOwnerFromTaskPayload,
                          IsCommentOwner, IsBoardOwnerFromTask,
                          IsTaskOwner, IsBoardMemberFromTask)
-from .serializers import (TaskSerializerCommentsCount,
-                          CommentSerializer, TaskSerializer)
+from .serializers import (TaskSerializerWithCommentsCount,
+                          CommentSerializer, UpdateDeleteTaskSerializer)
 from tasks_app.models import Task
 
 
 class TaskAssigneeList(generics.ListAPIView):
     """List tasks assigned to the current user."""
 
-    serializer_class = TaskSerializerCommentsCount
+    serializer_class = TaskSerializerWithCommentsCount
 
     def get_queryset(self):
         """Return tasks where the user is the assignee."""
@@ -26,7 +26,7 @@ class TaskAssigneeList(generics.ListAPIView):
 class TasksReviewingList(generics.ListAPIView):
     """List tasks the current user is reviewing."""
 
-    serializer_class = TaskSerializerCommentsCount
+    serializer_class = TaskSerializerWithCommentsCount
 
     def get_queryset(self):
         """Return tasks where the user is the reviewer."""
@@ -39,7 +39,7 @@ class PostTaskView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated,
                           IsBoardOwnerFromTaskPayload |
                           IsBoardMemberFromTaskPayload]
-    serializer_class = TaskSerializerCommentsCount
+    serializer_class = TaskSerializerWithCommentsCount
 
     def perform_create(self, serializer):
         """Save the task with the requesting user as owner."""
@@ -51,7 +51,7 @@ class UpdateDeleteTaskView(mixins.DestroyModelMixin,
                            generics.GenericAPIView):
     """Update or delete a single task."""
 
-    serializer_class = TaskSerializer
+    serializer_class = UpdateDeleteTaskSerializer
     lookup_url_kwarg = "task_id"
     queryset = Task.objects.all()
 

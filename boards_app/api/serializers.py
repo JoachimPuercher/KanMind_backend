@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from boards_app.models import Board
 from tasks_app.api.serializers import (
-    MemberSerializer, TaskSerializerCommentsCount)
+    MemberSerializer, TaskSerializerWithCommentsCount)
 from tasks_app.models import Status, Priority
 from user_auth_app.models import User
 
@@ -55,7 +55,7 @@ class GetBoardDetailSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=200, read_only=True)
     owner_id = serializers.IntegerField(read_only=True)
     members = MemberSerializer(read_only=True, many=True)
-    tasks = TaskSerializerCommentsCount(read_only=True, many=True)
+    tasks = TaskSerializerWithCommentsCount(read_only=True, many=True)
 
 
 class UpdateBoardDetailSerializer(serializers.Serializer):

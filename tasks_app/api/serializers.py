@@ -17,7 +17,7 @@ class MemberSerializer(serializers.ModelSerializer):
         read_only_fields = ["email", "id", "fullname"]
 
 
-class TaskSerializerCommentsCount(serializers.ModelSerializer):
+class TaskSerializerWithCommentsCount(serializers.ModelSerializer):
     """Serialize a task including its comment count."""
 
     assignee = MemberSerializer(read_only=True)
@@ -55,7 +55,7 @@ class TaskSerializerCommentsCount(serializers.ModelSerializer):
         return obj.comments.count()
 
 
-class TaskSerializer(serializers.ModelSerializer):
+class UpdateDeleteTaskSerializer(serializers.ModelSerializer):
     """Serialize a task with nested assignee and reviewer."""
 
     assignee = MemberSerializer(read_only=True)
