@@ -26,12 +26,12 @@ class TaskSerializerWithCommentsCount(serializers.ModelSerializer):
         queryset=User.objects.all(),
         write_only=True,
         source="assignee",
-        required=False)
+        required=True)
     reviewer_id = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(),
         write_only=True,
         source="reviewer",
-        required=False)
+        required=True)
     comments_count = serializers.SerializerMethodField()
 
     class Meta:
