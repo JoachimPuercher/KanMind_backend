@@ -35,6 +35,9 @@ DEBUG = os.getenv('DEBUG') == 'True'
 # Comma separated in .env, e.g. localhost,127.0.0.1
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
+# Frontend origins with scheme and port, e.g. http://127.0.0.1:5500
+CORS_ALLOWED_ORIGINS = os.environ['CORS_ALLOWED_ORIGINS'].split(',')
+
 
 # Application definition
 
@@ -47,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
     'user_auth_app',
     'tasks_app',
     'boards_app',
@@ -55,6 +59,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # Must run before CommonMiddleware to add the CORS headers.
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
