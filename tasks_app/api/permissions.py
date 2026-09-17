@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import BasePermission
-
-from ..models import Board, Comment, Task
+from boards_app.models import Board
+from ..models import Comment, Task
 
 
 def get_board_from_payload(request):

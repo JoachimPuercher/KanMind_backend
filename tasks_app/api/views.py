@@ -2,15 +2,13 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, mixins
 from rest_framework.permissions import IsAuthenticated
-
-from ..models import Comment
+from ..models import Comment, Task
 from .permissions import (IsBoardMemberFromTaskPayload,
                           DenyAllUsers, IsBoardOwnerFromTaskPayload,
                           IsCommentOwner, IsBoardOwnerFromTask,
                           IsTaskOwner, IsBoardMemberFromTask)
 from .serializers import (TaskSerializerWithCommentsCount,
                           CommentSerializer, UpdateDeleteTaskSerializer)
-from tasks_app.models import Task
 
 
 class TaskAssigneeList(generics.ListAPIView):
