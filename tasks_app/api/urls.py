@@ -1,5 +1,4 @@
 from django.urls import path
-
 from .views import (
     PostTaskView, TaskAssigneeList, DeleteCommentView,
     TaskCommentView, UpdateDeleteTaskView, TasksReviewingList)

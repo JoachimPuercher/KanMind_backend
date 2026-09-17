@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.db import models
-
 from boards_app.models import Board
 
 # Create your models here.
